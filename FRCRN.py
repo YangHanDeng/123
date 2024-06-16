@@ -47,12 +47,11 @@ class FRCRN(GstBase.BaseTransform):
             'acoustic-noise-suppression',
             model='./speech_frcrn_ans_cirm_16k_official_result')
         self.window_size = DEFAULT_WINDOW_SIZE
-        self.drybuf=np.empty([[]]*DEFAULT_CHANNEL, dtype=np.float32)
-        self.wetbuf=np.empty([[]]*DEFAULT_CHANNEL, dtype=np.float32)
-
         self.i=0
         self.window_func = np.array([])
-
+        self.drybuf=np.empty([[]]*DEFAULT_CHANNEL, dtype=np.float32)
+        self.wetbuf=np.empty([[]]*DEFAULT_CHANNEL, dtype=np.float32)
+        
     def do_get_property(self, prop):
         if prop.name == 'window-size':
             return self.window_size
