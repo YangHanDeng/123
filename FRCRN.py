@@ -91,7 +91,9 @@ class FRCRN(GstBase.BaseTransform):
                     self._normalize()
 
                 self.drybuf = self.drybuf[:, arrlen:]
-                enhanced = np.frombuffer(self.model(self.drybuf)['output_pcm'], dtype=np.float32) # enhance(self.model, self.df_state, self.drybuf)
+                enh_bytes = self.model(self.drybuf)['output_pcm']
+                enhanced = np.ndarray(shape = (DEFAULT_CHANNEL, arrlen),
+                                        dtype = np.float32, buffer = enh_bytes, order='F') # enhance(self.model, self.df_state, self.drybuf)
 
                 #print("enhanced{idx}: {val}".format(idx=self.i, val=enhanced[:,-arrlen:]))
                 # if DO_MIX:
