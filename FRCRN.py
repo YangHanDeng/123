@@ -91,7 +91,7 @@ class FRCRN(GstBase.BaseTransform):
                     self._normalize()
 
                 self.drybuf = self.drybuf[:, arrlen:]
-                enhanced = self.model(self.drybuf.tobytes()) # enhance(self.model, self.df_state, self.drybuf)
+                enhanced = self.model(self.drybuf) # enhance(self.model, self.df_state, self.drybuf)
                 #print("enhanced{idx}: {val}".format(idx=self.i, val=enhanced[:,-arrlen:]))
                 if DO_MIX:
                     enhanced = MIX_RATIO*self.drybuf + (1-MIX_RATIO)*enhanced
