@@ -4,7 +4,6 @@ gi.require_version('GstBase', '1.0')
 gi.require_version('GstAudio', '1.0')
 
 from gi.repository import Gst, GObject, GstBase, GstAudio, GLib
-import torch
 
 import numpy as np
 from modelscope.pipelines import pipeline
@@ -48,8 +47,8 @@ class FRCRN(GstBase.BaseTransform):
             'acoustic-noise-suppression',
             model='./speech_frcrn_ans_cirm_16k_official_result')
         self.window_size = DEFAULT_WINDOW_SIZE
-        self.drybuf=torch.tensor([[]]*DEFAULT_CHANNEL, dtype=torch.float32)
-        self.wetbuf=torch.tensor([[]]*DEFAULT_CHANNEL, dtype=torch.float32)
+        self.drybuf=np.empty([[]]*DEFAULT_CHANNEL, dtype=np.float32)
+        self.wetbuf=np.empty([[]]*DEFAULT_CHANNEL, dtype=np.float32)
 
         self.i=0
         self.window_func = np.array([])
@@ -82,25 +81,24 @@ class FRCRN(GstBase.BaseTransform):
                 arrlen = info.size//DEFAULT_CHANNEL//FLOAT_BYTE_RATIO
                 self.window_func = np.array([np.hanning(arrlen*2)]*DEFAULT_CHANNEL)
                 if self.i == 0:
-                    self.drybuf = torch.zeros(DEFAULT_CHANNEL, self.window_size * arrlen)
-                    self.wetbuf = torch.zeros(DEFAULT_CHANNEL, self.window_size * arrlen)
+                    self.drybuf = np.zeros(DEFAULT_CHANNEL, self.window_size * arrlen)
+                    self.wetbuf = np.zeros(DEFAULT_CHANNEL, self.window_size * arrlen)
                 
                 # interleaved => order='F'
                 numpy_data = np.ndarray(shape = (DEFAULT_CHANNEL, arrlen),
                                         dtype = np.float32, buffer = info.data, order='F')
-                self.drybuf = torch.hstack((self.drybuf, torch.from_numpy(numpy_data)))
+                self.drybuf = np.hstack((self.drybuf, numpy_data))
                 if DO_NORMALIZE:
                     self._normalize()
 
                 self.drybuf = self.drybuf[:, arrlen:]
                 enhanced = self.model(self.drybuf) # enhance(self.model, self.df_state, self.drybuf)
-
                 #print("enhanced{idx}: {val}".format(idx=self.i, val=enhanced[:,-arrlen:]))
                 if DO_MIX:
                     enhanced = MIX_RATIO*self.drybuf + (1-MIX_RATIO)*enhanced
                 
                 if DO_COMPRESS:
-                    enhanced = 0.99 * torch.tanh(enhanced)
+                    enhanced = 0.99 * np.tanh(enhanced)
                 
                 self.wetbuf = np.hstack((
                     self.wetbuf[:,arrlen:-arrlen],
