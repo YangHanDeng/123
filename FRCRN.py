@@ -49,8 +49,8 @@ class FRCRN(GstBase.BaseTransform):
         self.window_size = DEFAULT_WINDOW_SIZE
         self.i=0
         self.window_func = np.array([])
-        self.drybuf=np.empty([[]]*DEFAULT_CHANNEL, dtype=np.float32)
-        self.wetbuf=np.empty([[]]*DEFAULT_CHANNEL, dtype=np.float32)
+        self.drybuf=np.empty((3,0), dtype=np.float32)
+        self.wetbuf=np.empty((3,0), dtype=np.float32)
 
     def do_get_property(self, prop):
         if prop.name == 'window-size':
