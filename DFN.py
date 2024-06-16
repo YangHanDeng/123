@@ -46,8 +46,8 @@ class DFN(GstBase.BaseTransform):
         self.info = GstAudio.AudioInfo()
         self.model, self.df_state, _ = init_df(model_base_dir="DeepFilterNet2")
         self.window_size = DEFAULT_WINDOW_SIZE
-        self.drybuf=torch.tensor([[]]*DEFAULT_CHANNEL, dtype=torch.float32)
-        self.wetbuf=torch.tensor([[]]*DEFAULT_CHANNEL, dtype=torch.float32)
+        self.drybuf=torch.tensor((3,0), dtype=torch.float32)
+        self.wetbuf=torch.tensor((3,0), dtype=torch.float32)
 
         self.i=0
         self.window_func = np.array([])
