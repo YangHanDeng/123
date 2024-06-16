@@ -11,7 +11,7 @@ from modelscope.pipelines import pipeline
 DEFAULT_CHANNEL=2
 FLOAT_BYTE_RATIO=4
 DEFAULT_WINDOW_SIZE=32
-FIXED_CAPS = Gst.Caps.from_string('audio/x-raw, format=F32LE, layout=interleaved, rate=48000, channels={ch}'.format(ch=DEFAULT_CHANNEL))
+FIXED_CAPS = Gst.Caps.from_string('audio/x-raw, format=F32LE, layout=interleaved, rate=16000, channels={ch}'.format(ch=DEFAULT_CHANNEL))
 
 DO_MIX = False
 DO_NORMALIZE = False
@@ -91,7 +91,7 @@ class FRCRN(GstBase.BaseTransform):
                     self._normalize()
 
                 self.drybuf = self.drybuf[:, arrlen:]
-                enhanced = self.model(self.drybuf) # enhance(self.model, self.df_state, self.drybuf)
+                enhanced = self.model(self.drybuf.tobytes()) # enhance(self.model, self.df_state, self.drybuf)
                 #print("enhanced{idx}: {val}".format(idx=self.i, val=enhanced[:,-arrlen:]))
                 if DO_MIX:
                     enhanced = MIX_RATIO*self.drybuf + (1-MIX_RATIO)*enhanced
