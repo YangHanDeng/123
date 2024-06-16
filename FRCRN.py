@@ -91,7 +91,7 @@ class FRCRN(GstBase.BaseTransform):
                     self._normalize()
 
                 self.drybuf = self.drybuf[:, arrlen:]
-                enh_bytes = self.model(self.drybuf)['output_pcm']
+                enh_bytes = self.model(self.drybuf.transpose())['output_pcm']
                 print(len(enh_bytes))
                 print(len(self.drybuf.tobytes()))
                 enhanced = np.ndarray(shape = (DEFAULT_CHANNEL, arrlen),
