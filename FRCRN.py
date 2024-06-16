@@ -51,7 +51,7 @@ class FRCRN(GstBase.BaseTransform):
         self.window_func = np.array([])
         self.drybuf=np.empty([[]]*DEFAULT_CHANNEL, dtype=np.float32)
         self.wetbuf=np.empty([[]]*DEFAULT_CHANNEL, dtype=np.float32)
-        
+
     def do_get_property(self, prop):
         if prop.name == 'window-size':
             return self.window_size
@@ -80,8 +80,8 @@ class FRCRN(GstBase.BaseTransform):
                 arrlen = info.size//DEFAULT_CHANNEL//FLOAT_BYTE_RATIO
                 self.window_func = np.array([np.hanning(arrlen*2)]*DEFAULT_CHANNEL)
                 if self.i == 0:
-                    self.drybuf = np.zeros(DEFAULT_CHANNEL, self.window_size * arrlen)
-                    self.wetbuf = np.zeros(DEFAULT_CHANNEL, self.window_size * arrlen)
+                    self.drybuf = np.zeros((DEFAULT_CHANNEL, self.window_size * arrlen))
+                    self.wetbuf = np.zeros((DEFAULT_CHANNEL, self.window_size * arrlen))
                 
                 # interleaved => order='F'
                 numpy_data = np.ndarray(shape = (DEFAULT_CHANNEL, arrlen),
