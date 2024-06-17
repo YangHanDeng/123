@@ -8,7 +8,7 @@ from gi.repository import Gst, GObject, GstBase, GstAudio, GLib
 import numpy as np
 from modelscope.pipelines import pipeline
 
-DEFAULT_CHANNEL=2
+DEFAULT_CHANNEL=1
 FLOAT_BYTE_RATIO=4
 DEFAULT_WINDOW_SIZE=32
 FIXED_CAPS = Gst.Caps.from_string('audio/x-raw, format=F32LE, layout=interleaved, rate=16000, channels={ch}'.format(ch=DEFAULT_CHANNEL))

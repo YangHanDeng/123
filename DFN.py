@@ -7,7 +7,7 @@ from gi.repository import Gst, GObject, GstBase, GstAudio, GLib
 import torch
 
 import numpy as np
-from df.enhance import enhance, init_df, save_audio
+from df.enhance import enhance, init_df
 
 DEFAULT_CHANNEL=2
 FLOAT_BYTE_RATIO=4
