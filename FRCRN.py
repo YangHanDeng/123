@@ -71,8 +71,7 @@ class FRCRN(GstBase.BaseTransform):
         self.drybuf = (
             np.add (self.drybuf, -self.drybuf.mean(dim=1).reshape((2,1))) / (1e-3 + std)
         )
-    
-
+        
     def do_transform_ip(self, buf): # hanning with 64 chunks, start with all empty array
         try:
             with buf.map(Gst.MapFlags.READ | Gst.MapFlags.WRITE) as info:
